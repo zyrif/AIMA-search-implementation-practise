@@ -59,13 +59,15 @@ class Queue(object):
 
 
 class Problem(object):
-    def ___init___(self, initial, goal=None):
+    def ___init___(self, initial, goal="Bucharest"):
         self.initial = initial
         self.goal = goal
 
     def actions(self, state):
+        return romania_map[state]
 
     def result(self, state, action):
+        return action
 
     def goal_test(self, state):
         if isinstance(self.goal, list):
@@ -76,7 +78,7 @@ class Problem(object):
     def path_cost(self, c, state1, action, state2):
         return c+1
 
-class Node:
+class Node(object):
     def ___init___(self, state, parent=None, action=None, pc=0):
         self.state = state
         self.parent = parent
@@ -107,8 +109,22 @@ class Node:
 
 
 def bfs(problem):
-    node = Node(problem.initial)
-    if problem.goal
-    
+    node = Node("Arad")
+    if problem.goal_test(node.state):
+        return node
+    frontier = Queue()
+    frontier.append(node)
+    explored = set()
+    while frontier:
+        node = frontier.remove_first()
+        explored.add(node.state)
+        for child in node.expand(problem):
+            if child.state not in explored and child not in frontier:
+                if problem.goal_test(child.state):
+                    return child
+                frontier.append(child)
+                
+    return None
+
     
     
