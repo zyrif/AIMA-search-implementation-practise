@@ -67,6 +67,7 @@ class Node(object):
 def bfs(initial, goal):
     frontier = Queue()
     explored = []
+    path = []
     frontier.insert(Node(initial))
     
 ##    frontier.insert_all(node.nextnodes())
@@ -77,11 +78,12 @@ def bfs(initial, goal):
     while frontier.empty()==False:
 ##        print(frontier.remove_first().name)
         node = frontier.remove_first()
-        explored.append(node.parent + " -> " + node.name)
+        explored.append(node.name)
+        path.append(node.parent + " -> " + node.name)
         for i in node.nextnodes():
             if i not in explored and frontier.search(i)!=True:
                 if(node.name == goal):
-                    return explored
+                    return path
                 frontier.insert(node.cnode(i,node.name))
     return None
       
