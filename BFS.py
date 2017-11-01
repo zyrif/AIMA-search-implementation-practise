@@ -1,16 +1,3 @@
-from utils import (
-    is_in, argmin, argmax, argmax_random_tie, probability, weighted_sampler,
-    memoize, print_table, open_data, Stack, FIFOQueue, PriorityQueue, name,
-    distance
-)
-
-from collections import defaultdict
-import math
-import random
-import sys
-import bisect
-
-
 romania_map ={
     "Arad": {"Zerind": 75, "Timisoara": 118, "Sibiu": 140},
     "Zerind": {"Arad": 75, "Oradea": 71},
@@ -44,6 +31,11 @@ class Queue(object):
     def empty(self):
         return True if len(self.data)==0 else False
 
+    def search(self, x):
+        for i in self.data:
+            if(x == i.name):
+                return True
+
     def insert(self, el):
         self.data.append(el)
 
@@ -57,74 +49,39 @@ class Queue(object):
     def remove_first(self):
         return self.data.pop(0)
 
-
-class Problem(object):
-    def ___init___(self, initial, goal="Bucharest"):
-        self.initial = initial
-        self.goal = goal
-
-    def actions(self, state):
-        return romania_map[state]
-
-    def result(self, state, action):
-        return action
-
-    def goal_test(self, state):
-        if isinstance(self.goal, list):
-            return is_in(state, self.goal)
-        else:
-            return state == self.goal
-
-    def path_cost(self, c, state1, action, state2):
-        return c+1
-
 class Node(object):
-    def ___init___(self, state, parent=None, action=None, pc=0):
-        self.state = state
+    def __init__(self, name, parent=" "):
+        self.name = name
         self.parent = parent
-        self.action = action
-        self.pc = pc
-        self.depth = 0
-        if parent:
-            self.depth = parent.depth + 1
-
-    def expand(self,problem):
-        return [self.child_node(problem, action)
-                for action in problem.actions(self.state)]
-
-    def child_node(self, problem, action):
-        next = problem.result(self.state, action)
-        return Node(next, self, action, problem.pc(self.pc, self.state, action, next))
-
-    def solution(self):
-        return [node.action for node in self.path()[1:]]
-
-    def path(self):
-        node, path_back = self, []
-        while node:
-            path_back.append(node)
-            node = node.parent
-        return list(reversed(path_back))
+    def cnode(self, name, parent):
+        return Node(name, parent)
+    def name(self):
+        return self.name
+    def parent(self):
+        return self.parent
+    def nextnodes(self):
+##        return {'name': romania_map[self.name],'parent': self.name}
+        return romania_map[self.name]
 
 
-
-def bfs(problem):
-    node = Node("Arad")
-    if problem.goal_test(node.state):
-        return node
+def bfs(initial, goal):
     frontier = Queue()
-    frontier.append(node)
-    explored = set()
-    while frontier:
+    explored = []
+    frontier.insert(Node(initial))
+    
+##    frontier.insert_all(node.nextnodes())
+##    for i in node.nextnodes():
+##        frontier.insert(node.cnode(i,node.name))
+##    explored.append(node.name)
+    
+    while frontier.empty()==False:
+##        print(frontier.remove_first().name)
         node = frontier.remove_first()
-        explored.add(node.state)
-        for child in node.expand(problem):
-            if child.state not in explored and child not in frontier:
-                if problem.goal_test(child.state):
-                    return child
-                frontier.append(child)
-                
+        explored.append(node.parent + " -> " + node.name)
+        for i in node.nextnodes():
+            if i not in explored and frontier.search(i)!=True:
+                if(node.name == goal):
+                    return explored
+                frontier.insert(node.cnode(i,node.name))
     return None
-
-    
-    
+      
