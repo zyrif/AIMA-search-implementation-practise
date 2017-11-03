@@ -79,11 +79,30 @@ def bfs(initial, goal):
 ##        print(frontier.remove_first().name)
         node = frontier.remove_first()
         explored.append(node.name)
-        path.append(node.parent + " -> " + node.name)
+##        path.append(node.parent + " -> " + node.name)
+        path.append({'node': node.name, 'parent':node.parent})
         for i in node.nextnodes():
             if i not in explored and frontier.search(i)!=True:
                 if(node.name == goal):
-                    return path
+##                    print('Goal reached!')
+                    path2 = []
+                    path2.append(goal)
+                    tracenode = goal
+                    
+                    while path:
+##                        print('Entered while loop:')
+                        for i in path:
+##                            print('in for loop for value:'+str(i))
+                            if i['node']==tracenode:
+##                                print('Entered condition for '+i['node'])
+                                path2.append(i['parent'])
+                                tracenode = i['parent']
+                            elif tracenode == initial:
+                                path = []
+                                break
+
+                    path2.reverse()        
+                    return path2
                 frontier.insert(node.cnode(i,node.name))
     return None
       
