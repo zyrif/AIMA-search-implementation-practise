@@ -93,11 +93,11 @@ def bfs(initial, goal):
             tracenode = goal
             
             while path:
-                print('Entered while loop:')
+##                print('Entered while loop:')
                 for i in path:
-                    print('in for loop 2 for value:'+str(i))
+##                    print('in for loop 2 for value:'+str(i))
                     if i['node']==tracenode:
-                        print('Entered condition for '+i['node'])
+##                        print('Entered condition for '+i['node'])
                         if i['parent'] == " ":
                             path = []
                             break
@@ -111,9 +111,9 @@ def bfs(initial, goal):
             return path2
         
         for i in node.nextnodes():
-            print("in the loop 1 for value:" +str(i))
-            print(explored)
-            print(frontier.search(i))
+##            print("in the loop 1 for value:" +str(i))
+##            print(explored)
+##            print(frontier.search(i))
             if i not in explored and frontier.search(i)!=True:
                 frontier.insert(node.cnode(i))
     return None
