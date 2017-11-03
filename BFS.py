@@ -50,7 +50,8 @@ class Queue(object):
         return self.data.pop(0)
 
 class Node(object):
-    """call the constructor to create the initial node. """
+    """call the constructor to create the initial node, cnode to create and return a child node object of the calling object..."""
+    """...name and parents are self explanatory and nextnodes returns it's children (if any) as strings"""
     def __init__(self, name, parent=" "):
         self.name = name
         self.parent = parent
@@ -66,6 +67,8 @@ class Node(object):
 
 
 def bfs(initial, goal):
+    """frontier is the primary data structure used by bfs: a fifo queue. Explored keeps track of the visited nodes so they don't make a comeback..."""
+    """and path is used to calculate the return back path from goal to the inital node."""
     frontier = Queue()
     explored = []
     path = []
