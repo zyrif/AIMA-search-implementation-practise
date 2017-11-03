@@ -56,7 +56,7 @@ class Node(object):
         self.name = name
         self.parent = parent
     def cnode(self, name):
-        return Node(name, parent=self.name)
+        return Node(name, self.name)
     def name(self):
         return self.name
     def parent(self):
