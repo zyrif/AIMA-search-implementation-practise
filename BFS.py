@@ -50,11 +50,12 @@ class Queue(object):
         return self.data.pop(0)
 
 class Node(object):
+    """call the constructor to create the initial node. """
     def __init__(self, name, parent=" "):
         self.name = name
         self.parent = parent
-    def cnode(self, name, parent):
-        return Node(name, parent)
+    def cnode(self, name):
+        return Node(name, parent=self.name)
     def name(self):
         return self.name
     def parent(self):
@@ -103,6 +104,6 @@ def bfs(initial, goal):
 
                     path2.reverse()        
                     return path2
-                frontier.insert(node.cnode(i,node.name))
+                frontier.insert(node.cnode(i))
     return None
       
