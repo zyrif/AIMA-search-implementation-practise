@@ -98,11 +98,27 @@ def ucs(initial, goal):
     while frontier.empty()==False:
         node = frontier.remove_first()
         explored.append(node.name)
-        path.append(node.parent + " -> " + node.name + ": " + str(node.pathcost))
+##        path.append(node.parent + " -> " + node.name + ": " + str(node.pathcost))
+        path.append({'node': node.name, 'parent': node.parent, 'pathcost': str(node.pathcost)})
+        
+        if(node.name == goal):
+            path2 = []
+            tracenode = goal
+
+            while path:
+                for i in path:
+                    if i['node']==tracenode:
+                        path2.append({i['node']: i['pathcost']})
+                        if i['parent'] == " ":
+                            path = []
+                            break
+                        tracenode = i['parent']
+            
+            path2.reverse()
+            return path2
+        
         for i in node.nextnodes():
             if i not in explored and frontier.search(i)!=True:
-                if(node.name == goal):
-                    return path
                 frontier.insert(node.cnode(i,node.name,node.pathcost+romania_map[node.name][i]))
             elif frontier.search(i)==True:
                 chkdNode = frontier.getNode(i)
