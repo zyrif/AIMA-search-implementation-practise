@@ -45,7 +45,6 @@ romania_heuristic={
     }
 
 class Queue(object):
-    """Simple FIFO queue"""
     def __init__(self, el=None):
         self.data = []
         if el:
@@ -123,7 +122,6 @@ def gbfs(initial):
     while frontier.empty()==False:
         node = frontier.remove_first()
         explored.append(node.name)
-##        path.append(node.parent + " -> " + node.name + ": " + str(node.pathcost))
         path.append({'node': node.name, 'parent': node.parent, 'pathcost': str(node.pathcost)})
         
         if(node.name == goal):

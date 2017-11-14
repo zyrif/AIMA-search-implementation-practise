@@ -22,7 +22,6 @@ romania_map ={
 }
 
 class Queue(object):
-    """Simple FIFO queue"""
     def __init__(self, el=None):
         self.data = []
         if el:
@@ -50,8 +49,6 @@ class Queue(object):
         return self.data.pop(0)
 
 class Node(object):
-    """call the constructor to create the initial node, cnode to create and return a child node object of the calling object..."""
-    """...name and parents are self explanatory and nextnodes returns it's children (if any) as strings"""
     def __init__(self, name, parent=" "):
         self.name = name
         self.parent = parent
@@ -62,28 +59,19 @@ class Node(object):
     def parent(self):
         return self.parent
     def nextnodes(self):
-##        return {'name': romania_map[self.name],'parent': self.name}
         return romania_map[self.name]
 
 
 def bfs(initial, goal):
-    """frontier is the primary data structure used by bfs: a fifo queue. Explored keeps track of the visited nodes so they don't make a comeback..."""
-    """and path is used to calculate the return back path from goal to the inital node."""
     frontier = Queue()
     explored = []
     path = []
     frontier.insert(Node(initial))
-    
-##    frontier.insert_all(node.nextnodes())
-##    for i in node.nextnodes():
-##        frontier.insert(node.cnode(i,node.name))
-##    explored.append(node.name)
+
     
     while frontier.empty()==False:
-##        print(frontier.remove_first().name)
         node = frontier.remove_first()
         explored.append(node.name)
-##        path.append(node.parent + " -> " + node.name)
         path.append({'node': node.name, 'parent':node.parent})
         
         if(node.name == goal):
@@ -93,27 +81,19 @@ def bfs(initial, goal):
             tracenode = goal
             
             while path:
-##                print('Entered while loop:')
                 for i in path:
-##                    print('in for loop 2 for value:'+str(i))
                     if i['node']==tracenode:
-##                        print('Entered condition for '+i['node'])
                         if i['parent'] == " ":
                             path = []
                             break
                         path2.append(i['parent'])
                         tracenode = i['parent']
-##                            elif tracenode == initial:
-##                                path = []
-##                                break
+
 
             path2.reverse()        
             return path2
         
         for i in node.nextnodes():
-##            print("in the loop 1 for value:" +str(i))
-##            print(explored)
-##            print(frontier.search(i))
             if i not in explored and frontier.search(i)!=True:
                 frontier.insert(node.cnode(i))
     return None

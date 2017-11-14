@@ -45,7 +45,6 @@ romania_heuristic={
     }
 
 class Queue(object):
-    """Simple Priority queue"""
     def __init__(self, el=None):
         self.data = []
         if el:
@@ -68,7 +67,6 @@ class Queue(object):
                 self.data.remove(i)
     
     def sortQueue(self):
-        """ Makes the queue a priority queue. Sorts the queue based on path cost. """
         index = 1
         if len(self.data)>1:
             while len(self.data)>index:
@@ -98,47 +96,36 @@ class Queue(object):
 
 class Node(object):
     def __init__(self, name, pathcost=0, parent=" "):
-        """ Creates the initial node """
         self.name = name
         self.parent = parent
         self.pathcost = pathcost
     def cnode(self, name, pathcost):
-        """ Creates a child node of the caller node """
         return Node(name, pathcost, self.name)
     def name(self):
         return self.name
     def parent(self):
         return self.parent
     def pathcost(self):
-        """ Returns the actual path cost, estimated (heuristic) cost isn't included  """
         return self.pathcost
     def nextnodes(self):
         return romania_map[self.name]
-        """ Returns list of child nodes as string. Would've been much better if it could return child nodes as a list of nodes."""
 
 
 def astar(initial):
-    """Only takes initial node because the heuristic data's only for one goal: Bucharest """
     goal = 'Bucharest'
     frontier = Queue()
     explored = []
     path = []
     cpath = []
-    """ Holds the complete path. Content is rewritten if algorithm finds a shorter path. Returned after frontier is empty."""
+
     frontier.insert(Node(initial))
-    """ Creates the initial node and pushes it to the queue so that the queue's not empty """
     
     while frontier.empty()==False:
-        """ Will run until the queue is empty """
         node = frontier.remove_first()
-        """ pops the first element (node) and stores it in a variable """
         explored.append(node.name)
-        """ Stores only the name of the node. This makes searching the list easier """
         path.append({'node': node.name, 'parent': node.parent, 'pathcost': str(node.pathcost+romania_heuristic[node.name])})
-        """ Since the node object doesn't contain the estimated cost, it's added where it's needed. This can be avoided by rewriting the node class to hold actual cost and estimated cost separately. """
         
         if(node.name == goal):
-            """ Goal test. Creates the path by tracing back. Immediately doesn't return the path because A* wants to run until the queue is empty"""
             path2 = []
             tracenode = goal
 
@@ -156,13 +143,10 @@ def astar(initial):
         
         for i in node.nextnodes():
             if i not in explored and frontier.search(i)!=True:
-                """ Not in explored and not in frontier? Insert."""
                 frontier.insert(node.cnode(i,node.pathcost+romania_map[node.name][i]))
             elif frontier.search(i)==True:
-                """ If it's in frontier then it's not in explored. If the new node's path costs less then old node, replace. """
                 chkdNode = frontier.getNode(i)
                 if node.pathcost+romania_map[node.name][i]+romania_heuristic[node.name] < chkdNode.pathcost+romania_heuristic[i]:
-                    """ Since the node object doesn't contain the estimated cost, it's added where it's needed """
                     frontier.delNode(chkdNode.name)
                     frontier.insert(node.cnode(i,node.pathcost+romania_map[node.name][i]))
                     
